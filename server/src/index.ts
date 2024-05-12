@@ -1,16 +1,28 @@
-import { Server } from 'socket.io';
+import net, {Socket} from 'net';
 import logger from './Logger.js';
 
-logger.info('start');
+const port = 8008;
 
-const io = new Server();
+const server = net.createServer();
+server.listen(port, () => {
+  logger.info(`Server is listening on port ${port}`);
 
-io.on('connection', socket => {
-  logger.info(`Socket Connection Created, ${socket.id}`);
+})
 
-  socket.on('hellow', () => {
-    logger.info('hellow');
-  });
-});
+const sockets: Array<Socket> = [];
 
-io.listen(8008);
+server.on('connection', (socket) => {
+  logger.info(`Connection established to ${socket.remoteAddress}:${socket.remotePort}`);
+  sockets.push(socket);
+
+  socket.on('data', (data) => {
+    logger.info(`DATA from ${socket.remoteAddress}: ${data}`);
+  })
+  socket.on('end', () => {
+    const index = sockets.findIndex(function(o) {
+      return o.remoteAddress === socket.remoteAddress && o.remotePort === socket.remotePort;
+    })
+    if (index !== -1) sockets.splice(index, 1);
+    console.log('CLOSED: ' + socket.remoteAddress + ' ' + socket.remotePort);
+  })
+})

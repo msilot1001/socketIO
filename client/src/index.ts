@@ -1,13 +1,10 @@
-import { io } from 'socket.io-client';
-import logger from './Logger.js';
+import net, {Socket} from 'net';
 
-logger.info('start');
+const client = new Socket();
+const port = 8008;
+const host = 'localhost';
 
-const socket = io('http://localhost:8008', { reconnection: true });
-
-// client-side
-socket.on('connect', () => {
-  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+client.connect(port, host, function() {
+    console.log('Connected');
+    client.write("Hello From Client " + client.address());
 });
-
-socket.emit('hellow');
