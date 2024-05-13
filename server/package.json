@@ -19,9 +19,12 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.6.2",
+    "prisma": "^5.13.0",
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@prisma/client": "5.13.0",
+    "@types/node": "^20.12.11",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.7.1"
   }
